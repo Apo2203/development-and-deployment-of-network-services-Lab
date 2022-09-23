@@ -44,6 +44,17 @@ public class Server
 	{
 		var self = new Server();
 		self.Run(args);
+
+		
+		var sc = new ServiceCollection();
+
+		var sp = sc.BuildServiceProvider();
+		var service = sp.GetService<IService>();
+
+		System.Console.WriteLine("Generating wolf coordinates from main	");
+		service.generateWolfPosition();
+		System.Console.WriteLine("wolf coordinates generate");
+
 	}
 
 	/// <summary>
@@ -61,7 +72,6 @@ public class Server
 		//start the server
 		StartServer(args);
 
-		
 	}
 
 	/// <summary>

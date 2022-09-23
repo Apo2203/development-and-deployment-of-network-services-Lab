@@ -35,7 +35,9 @@ public class Service : IService
 
 	public void generateWolfPosition(){
 		lock(accessLock){
-			generateWolfPosition();
+			System.Console.WriteLine("Wolf in service");
+			logic.generateWolfPosition();
+			System.Console.WriteLine("after call in service");
 		}
 	}
 

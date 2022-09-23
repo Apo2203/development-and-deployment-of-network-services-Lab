@@ -45,14 +45,15 @@ class ServiceLogic : IService
 	/// <returns>left + right</returns>
 	public int AddLiteral(int left, int right)
 	{
-		//log.Info($"AddLiteral({left}, {right})");
+		log.Info($"AddLiteral({left}, {right})");
+		System.Console.WriteLine("Add literal");
 		return left + right;
 	}
 
 	public void generateWolfPosition(){
 		xWolfPosition = rnd.Next(50);
 		yWolfPosition = rnd.Next(50);
-
+		System.Console.WriteLine("In Wolf function");
 		log.Info("$Wolf position -> x: {xWolfPosition} y: {yWolfPosition}");
 	}
 
