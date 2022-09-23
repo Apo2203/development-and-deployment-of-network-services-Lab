@@ -56,10 +56,12 @@ public class Server
 		ConfigureLogging();
 
 		//indicate server is about to start
-		log.Info("Server is about to start");
-
+		log.Info("Server is about to start...");
+		
 		//start the server
 		StartServer(args);
+
+		
 	}
 
 	/// <summary>
@@ -90,7 +92,7 @@ public class Server
 
 		//add SimpleRPC middleware
 		app.UseSimpleRpcServer();
-
+		
 		//run the server
 		app.Run();
 		// app.RunAsync(); //use this if you need to implement background processing in the main thread

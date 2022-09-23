@@ -33,6 +33,12 @@ public class Service : IService
 		}
 	}
 
+	public void generateWolfPosition(){
+		lock(accessLock){
+			generateWolfPosition();
+		}
+	}
+
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>

@@ -30,6 +30,7 @@ class Client
 		var console =
 			new NLog.Targets.ConsoleTarget("console")
 			{
+				//Layout = @"${date:format=HH\:mm\:ss}|${level}| ${message} ${exception}"
 				Layout = @"${date:format=HH\:mm\:ss}|${level}| ${message} ${exception}"
 			};
 		config.AddTarget(console);
