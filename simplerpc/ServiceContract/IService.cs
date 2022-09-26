@@ -36,7 +36,7 @@ public interface IService
 	/// <returns>left + right</returns>
 	int AddLiteral(int left, int right);
 
-	public void generateWolfPosition();
+	void generateWolfPosition();
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>

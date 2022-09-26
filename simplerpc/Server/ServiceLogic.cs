@@ -33,6 +33,11 @@ class ServiceLogic : IService
 	int xRubbitPosition = -1;
 	int yRubbitPosition = -1;
 
+	// Weight of the Rubbit when it borns
+	int weightRubbit = -1;
+	//Distance of the rabbit to the wolf when it borns
+	int distanceRubbit = -1;
+
 	// useful for the generation of random coordinates
 	Random rnd = new Random();
 	
@@ -56,6 +61,16 @@ class ServiceLogic : IService
 		System.Console.WriteLine("In Wolf function");
 		log.Info("$Wolf position -> x: {xWolfPosition} y: {yWolfPosition}");
 	}
+
+	public bool generateRubbit(){
+		bool isEaten = false;
+
+		int weight = rnd.Next(1,20);
+
+
+		return isEaten;
+	}
+
 
 	/// <summary>
 	/// Add given numbers.

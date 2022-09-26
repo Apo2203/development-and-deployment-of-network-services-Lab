@@ -51,9 +51,9 @@ public class Server
 		var sp = sc.BuildServiceProvider();
 		var service = sp.GetService<IService>();
 
-		System.Console.WriteLine("Generating wolf coordinates from main	");
-		service.generateWolfPosition();
-		System.Console.WriteLine("wolf coordinates generate");
+		//System.Console.WriteLine("Generating wolf coordinates from main	");
+		//service.generateWolfPosition();
+		//System.Console.WriteLine("wolf coordinates generate");
 
 	}
 
