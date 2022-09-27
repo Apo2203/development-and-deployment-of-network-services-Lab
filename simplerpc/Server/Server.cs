@@ -44,17 +44,6 @@ public class Server
 	{
 		var self = new Server();
 		self.Run(args);
-
-		
-		var sc = new ServiceCollection();
-
-		var sp = sc.BuildServiceProvider();
-		var service = sp.GetService<IService>();
-
-		//System.Console.WriteLine("Generating wolf coordinates from main	");
-		//service.generateWolfPosition();
-		//System.Console.WriteLine("wolf coordinates generate");
-
 	}
 
 	/// <summary>
@@ -71,6 +60,12 @@ public class Server
 		
 		//start the server
 		StartServer(args);
+
+		while(true){
+			Service.logic.generateWolfPosition();
+			Thread.Sleep(5000);
+		}
+		//Put the function here
 
 	}
 
@@ -104,7 +99,7 @@ public class Server
 		app.UseSimpleRpcServer();
 		
 		//run the server
-		app.Run();
-		// app.RunAsync(); //use this if you need to implement background processing in the main thread
+		//app.Run();
+		app.RunAsync(); //use this if you need to implement background processing in the main thread
 	}
 }

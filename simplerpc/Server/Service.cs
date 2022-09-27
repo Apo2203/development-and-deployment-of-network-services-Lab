@@ -11,12 +11,12 @@ public class Service : IService
 	/// <summary>
 	/// Access lock.
 	/// </summary>
-	private readonly Object accessLock = new Object();
+	public static readonly Object accessLock = new Object();
 
 	/// <summary>
 	/// Service logic implementation.
 	/// </summary>
-	private ServiceLogic logic = new ServiceLogic();
+	public static ServiceLogic logic = new ServiceLogic();
 
 
 	/// <summary>
@@ -32,15 +32,6 @@ public class Service : IService
 			return logic.AddLiteral(left, right);
 		}
 	}
-
-	public void generateWolfPosition(){
-		lock(accessLock){
-			System.Console.WriteLine("Wolf in service");
-			logic.generateWolfPosition();
-			System.Console.WriteLine("after call in service");
-		}
-	}
-
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>

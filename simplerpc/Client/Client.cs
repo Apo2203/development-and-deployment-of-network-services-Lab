@@ -74,7 +74,7 @@ class Client
 
 				while( true )
 				{
-
+					
 					/**
 					//test simple call
 					var left = rnd.Next(-100, 100);

@@ -8,7 +8,7 @@ using Services;
 /// <summary>
 /// Service logic.
 /// </summary>
-class ServiceLogic : IService
+public class ServiceLogic : IService
 {
 	/// <summary>
 	/// Logger for this class.
@@ -17,9 +17,12 @@ class ServiceLogic : IService
 
 	// Amount of food that wolf can eat. Default is 100. It decremeant each time the wolf eat or drink. 
 	// It will be also reset when it became 0.
-	int foodLeft = 100;
-	// Minimum distance that make the wolf see a rabbit to eat or water to drink.
-	int maxEatDistance = 5;
+	int wolfFoodLeft = 100;
+	
+	// A flag useful to know if the "wolfFoodLeft" variable is in use from another Client.
+	bool isAlreadyEating = false;
+	/// Minimum distance that make the wolf see a rabbit to eat or water to drink.
+	int maxDistance = 5;
 
 	// Coordinate in the space of walf position. From 0 to 50 where the spawn point is 0.
 	int xWolfPosition = -1;
@@ -33,10 +36,6 @@ class ServiceLogic : IService
 	int xRubbitPosition = -1;
 	int yRubbitPosition = -1;
 
-	// Weight of the Rubbit when it borns
-	int weightRubbit = -1;
-	//Distance of the rabbit to the wolf when it borns
-	int distanceRubbit = -1;
 
 	// useful for the generation of random coordinates
 	Random rnd = new Random();
@@ -56,19 +55,33 @@ class ServiceLogic : IService
 	}
 
 	public void generateWolfPosition(){
-		xWolfPosition = rnd.Next(50);
-		yWolfPosition = rnd.Next(50);
-		System.Console.WriteLine("In Wolf function");
-		log.Info("$Wolf position -> x: {xWolfPosition} y: {yWolfPosition}");
+        xWolfPosition = rnd.Next(50);
+        yWolfPosition = rnd.Next(50);
+        log.Info($"Wolf position -> x: {xWolfPosition} y: {yWolfPosition}");
 	}
 
-	public bool generateRubbit(){
-		bool isEaten = false;
+	public void generateRubbit(){
 
-		int weight = rnd.Next(1,20);
+		int rubbitWeight = rnd.Next(1, 20);
+		int rubbitDistance = rnd.Next(1, 30);
+		
+		// If the rubbit is eaten by the wolf;
+		bool isEaten = false; 
 
+		do{
+			if(rubbitDistance < maxDistance){
+				isAlreadyEating = true; // take mutual exclusion
+				isEaten = true;
 
-		return isEaten;
+				wolfFoodLeft = wolfFoodLeft - rubbitWeight;
+				if (wolfFoodLeft < 0){ // The wolf eaten more than it could
+					Thread.Sleep(5000);
+					wolfFoodLeft = 100;
+				}
+				isAlreadyEating = false;
+			}
+		}while(!isEaten);
+
 	}
 
 
