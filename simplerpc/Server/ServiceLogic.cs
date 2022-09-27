@@ -28,14 +28,6 @@ public class ServiceLogic : IService
 	int xWolfPosition = -1;
 	int yWolfPosition = -1;
 	
-	// Coordinate in the space of water position. If the water is not yet spawned is -1.
-	int xWaterPosition = -1;
-	int yWaterPosition = -1;
-
-	// Coordinate in the space of rubbit position. If the rabbit is not yet spawned is -1;
-	int xRubbitPosition = -1;
-	int yRubbitPosition = -1;
-
 
 	// useful for the generation of random coordinates
 	Random rnd = new Random();
@@ -48,7 +40,7 @@ public class ServiceLogic : IService
 	/// <param name="right">Right number.</param>
 	/// <returns>left + right</returns>
 	public int AddLiteral(int left, int right)
-	{
+	{ 
 		log.Info($"AddLiteral({left}, {right})");
 		System.Console.WriteLine("Add literal");
 		return left + right;
@@ -63,23 +55,33 @@ public class ServiceLogic : IService
 	public void generateRubbit(){
 
 		int rubbitWeight = rnd.Next(1, 20);
-		int rubbitDistance = rnd.Next(1, 30);
 		
 		// If the rubbit is eaten by the wolf;
 		bool isEaten = false; 
-
+		log.Info($"Rubbit generated with a weight of ({rubbitWeight}) kg\n");
 		do{
+			//Rubbit distance from the wolf
+			int rubbitDistance = rnd.Next(1, 30);
+			log.Info($"Actually the distance from the wolf is ({rubbitDistance})\n");
+
 			if(rubbitDistance < maxDistance){
+				log.Info("The rubbit is too close to the wolf, is gonna be eated!\n");
+
+				while(isAlreadyEating){} // Just do nothing, wait for the mutual exclusion.
+
 				isAlreadyEating = true; // take mutual exclusion
 				isEaten = true;
 
 				wolfFoodLeft = wolfFoodLeft - rubbitWeight;
 				if (wolfFoodLeft < 0){ // The wolf eaten more than it could
-					Thread.Sleep(5000);
-					wolfFoodLeft = 100;
+					Thread.Sleep(5000); // I wait 5 seconds holding the mutual exclusion
+					wolfFoodLeft = 100; // resetting the food the wolf can eat
 				}
-				isAlreadyEating = false;
+				isAlreadyEating = false; // release mutual exclusion
 			}
+			else{ // If the rubbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
+				Thread.Sleep(2000); 
+			} 
 		}while(!isEaten);
 
 	}

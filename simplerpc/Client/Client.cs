@@ -72,9 +72,14 @@ class Client
 				//use service
 				var rnd = new Random();
 
+				/**
+				Generate a rubbit. When it dead (when the function that generate it end) I wait 5 sec and then I generate another one.
+				*/
 				while( true )
 				{
-					
+					var sum = service.AddLiteral(12, 13);
+					service.generateRubbit();
+					Thread.Sleep(5000);
 					/**
 					//test simple call
 					var left = rnd.Next(-100, 100);
@@ -82,7 +87,6 @@ class Client
 
 					log.Info($"Before 'int Add(int, int)': left={left}, right={right}");
 					System.Console.WriteLine("provaaaaa");
-					var sum = service.AddLiteral(left, right);
 					log.Info($"After 'int Add(int, int)': sum={sum}, left={left}, right={right}");
 					log.Info("---");
 
@@ -113,7 +117,7 @@ class Client
 	static void Main(string[] args)
 	{
 		var self = new Client();
-		Console.WriteLine("I'm starting the service");
+		Console.WriteLine("I'm starting the generation of the rubbits!\n");
 		self.Run();
 	}
 }

@@ -32,6 +32,15 @@ public class Service : IService
 			return logic.AddLiteral(left, right);
 		}
 	}
+
+	public void generateRubbit()
+	{
+		lock ( accessLock )
+		{
+			logic.generateRubbit();
+		}
+	}
+
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>

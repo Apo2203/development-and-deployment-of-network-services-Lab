@@ -7,7 +7,7 @@ Components: Wolf (server), rabbit (client1), water(client2)
 
 Description: When rabbit is born it generates a random weight for itself. Afterwards rabbit generates random values that specify distance of the rabbit to the wolf. If the distance is less than chosen, wolf eats rabbit and gets the amount of food equal to the rabbits weight. Eaten rabbit dies and gets reborn after 5 sec.
 
-        - What if the rabbit is not so close to be eaten from the wolf and so don't die? So if the rabbit is not died still have I to respown it after 5 sec or not? I have to generate again random distance to the wolf unitl the rabbit is not eaten
+        - What if the rabbit is not so close to be eaten from the wolf and so don't die? So if the rabbit is not died still have I to respown it after 5 sec or not? I have to generate again random distance to the wolf until the rabbit is not eaten
 
 
 
