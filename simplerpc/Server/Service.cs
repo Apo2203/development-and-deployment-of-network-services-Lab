@@ -41,6 +41,14 @@ public class Service : IService
 		}
 	}
 
+	public void generateWater(int x, int y, int litres)
+	{
+		lock ( accessLock )
+		{
+			logic.generateWater(x, y, litres);
+		}
+	}
+
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>

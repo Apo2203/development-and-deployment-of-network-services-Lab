@@ -13,7 +13,7 @@ using Services;
 /// <summary>
 /// Client example.
 /// </summary>
-class Client
+class ClientRubbit
 {
 	/// <summary>
 	/// Logger for this class.
@@ -75,30 +75,15 @@ class Client
 				/**
 				Generate a rubbit. When it dead (when the function that generate it end) I wait 5 sec and then I generate another one.
 				*/
+				int xWaterPosition = rnd.Next(1, 50);
+				int yWaterPosition = rnd.Next(1, 50);
+				int volumeOfWater = rnd.Next(1, 10);
 				while( true )
 				{	
-					int rubbitWeight = rnd.Next(1, 30);
-					log.Info($"A rubbit with a weight of ({rubbitWeight}) kg is spawning in the map...");
-					int distance = service.generateRubbit(rubbitWeight);
-					log.Info($"The rubbit moved too close to the wolf ({distance} metres) and was eaten.\n");
+					log.Info($"A pool with about {volumeOfWater} liters of water is spawning in the coordinates {xWaterPosition}, {yWaterPosition} ...");
+					service.generateWater(xWaterPosition, yWaterPosition, volumeOfWater);
+					log.Info($"A wolf moved really close to the water and drank it. Respawning the water...\n");
 					Thread.Sleep(5000);
-
-					/**
-					//test simple call
-					var left = rnd.Next(-100, 100);
-					var right = rnd.Next(-100, 100);
-					log.Info($"Before 'int Add(int, int)': left={left}, right={right}");
-
-					log.Info($"After 'int Add(int, int)': sum={sum}, left={left}, right={right}");
-					log.Info("---");
-
-					left = rnd.Next(-100, 100);
-					right = rnd.Next(-100, 100);
-					var leftAndRight = new ByValStruct() { Left = left, Right = right};
-
-					Thread.Sleep(2000);
-					*/
-
 				}
 			}
 			catch( Exception e )
@@ -118,7 +103,7 @@ class Client
 	/// <param name="args">Command line arguments.</param>
 	static void Main(string[] args)
 	{
-		var self = new Client();
+		var self = new ClientRubbit();
 		Console.WriteLine("I'm starting the generation of the rubbits!\n");
 		self.Run();
 	}

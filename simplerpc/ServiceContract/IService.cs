@@ -38,6 +38,8 @@ public interface IService
 
 	int generateRubbit(int weight);
 
+	void generateWater(int x, int y, int litres);
+
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>
