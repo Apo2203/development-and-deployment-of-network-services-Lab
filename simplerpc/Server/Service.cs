@@ -33,11 +33,11 @@ public class Service : IService
 		}
 	}
 
-	public void generateRubbit()
+	public int generateRubbit(int weight)
 	{
 		lock ( accessLock )
 		{
-			logic.generateRubbit();
+			return logic.generateRubbit(weight);
 		}
 	}
 

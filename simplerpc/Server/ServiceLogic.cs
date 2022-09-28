@@ -52,20 +52,19 @@ public class ServiceLogic : IService
         log.Info($"Wolf position -> x: {xWolfPosition} y: {yWolfPosition}");
 	}
 
-	public void generateRubbit(){
+	public int generateRubbit(int rubbitWeight){
 
-		int rubbitWeight = rnd.Next(1, 20);
-		
+		// just inizialing the variable.
+		int rubbitDistance = -1;		
 		// If the rubbit is eaten by the wolf;
 		bool isEaten = false; 
-		log.Info($"Rubbit generated with a weight of ({rubbitWeight}) kg\n");
 		do{
 			//Rubbit distance from the wolf
-			int rubbitDistance = rnd.Next(1, 30);
-			log.Info($"Actually the distance from the wolf is ({rubbitDistance})\n");
+			rubbitDistance = rnd.Next(1, 30);
 
 			if(rubbitDistance < maxDistance){
-				log.Info("The rubbit is too close to the wolf, is gonna be eated!\n");
+				log.Info("A rubbit moved too close to the walf and was eaten...");
+				log.Info($"The walf gained so ({rubbitWeight}) kg of food");
 
 				while(isAlreadyEating){} // Just do nothing, wait for the mutual exclusion.
 
@@ -74,6 +73,7 @@ public class ServiceLogic : IService
 
 				wolfFoodLeft = wolfFoodLeft - rubbitWeight;
 				if (wolfFoodLeft < 0){ // The wolf eaten more than it could
+					log.Info("The wolf ate more the he could. Now he has to wait a while before starting eating again...\n");
 					Thread.Sleep(5000); // I wait 5 seconds holding the mutual exclusion
 					wolfFoodLeft = 100; // resetting the food the wolf can eat
 				}
@@ -83,6 +83,8 @@ public class ServiceLogic : IService
 				Thread.Sleep(2000); 
 			} 
 		}while(!isEaten);
+
+		return rubbitDistance;
 
 	}
 

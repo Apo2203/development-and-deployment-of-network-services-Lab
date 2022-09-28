@@ -76,17 +76,19 @@ class Client
 				Generate a rubbit. When it dead (when the function that generate it end) I wait 5 sec and then I generate another one.
 				*/
 				while( true )
-				{
-					var sum = service.AddLiteral(12, 13);
-					service.generateRubbit();
+				{	
+					int rubbitWeight = rnd.Next(1, 30);
+					log.Info($"A rubbit with a weight of ({rubbitWeight}) kg is spawning in the map...");
+					int distance = service.generateRubbit(rubbitWeight);
+					log.Info($"The rubbit moved too close to the wolf ({distance} metres) and was eaten.\n");
 					Thread.Sleep(5000);
+
 					/**
 					//test simple call
 					var left = rnd.Next(-100, 100);
 					var right = rnd.Next(-100, 100);
-
 					log.Info($"Before 'int Add(int, int)': left={left}, right={right}");
-					System.Console.WriteLine("provaaaaa");
+
 					log.Info($"After 'int Add(int, int)': sum={sum}, left={left}, right={right}");
 					log.Info("---");
 

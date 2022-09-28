@@ -36,7 +36,7 @@ public interface IService
 	/// <returns>left + right</returns>
 	int AddLiteral(int left, int right);
 
-	void generateRubbit();
+	int generateRubbit(int weight);
 
 	/// <summary>
 	/// Add given numbers.
