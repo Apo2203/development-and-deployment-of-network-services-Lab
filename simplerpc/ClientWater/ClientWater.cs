@@ -75,14 +75,14 @@ class ClientRubbit
 				/**
 				Generate a rubbit. When it dead (when the function that generate it end) I wait 5 sec and then I generate another one.
 				*/
-				int xWaterPosition = rnd.Next(1, 50);
-				int yWaterPosition = rnd.Next(1, 50);
 				int volumeOfWater = rnd.Next(1, 10);
 				while( true )
 				{	
+					int xWaterPosition = rnd.Next(1, 50);
+					int yWaterPosition = rnd.Next(1, 50);
 					log.Info($"A pool with about {volumeOfWater} liters of water is spawning in the coordinates {xWaterPosition}, {yWaterPosition} ...");
 					service.generateWater(xWaterPosition, yWaterPosition, volumeOfWater);
-					log.Info($"A wolf moved really close to the water and drank it. Respawning the water...\n");
+					log.Info($"A wolf moved really close to the water and drank it. Respawning the same water in another position...\n");
 					Thread.Sleep(5000);
 				}
 			}
@@ -104,7 +104,7 @@ class ClientRubbit
 	static void Main(string[] args)
 	{
 		var self = new ClientRubbit();
-		Console.WriteLine("I'm starting the generation of the rubbits!\n");
+		Console.WriteLine("I'm starting the generation of the water!\n");
 		self.Run();
 	}
 }

@@ -63,9 +63,7 @@ public class Server
 
 		while(true){
 			Service.logic.generateWolfPosition();
-			Thread.Sleep(5000);
 		}
-		//Put the function here
 
 	}
 
