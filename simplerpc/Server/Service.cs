@@ -49,6 +49,34 @@ public class Service : IService
 		}
 	}
 
+	public int getXWolf(){
+		lock ( accessLock )
+		{
+			return logic.getXWolf();
+		}
+	}
+	public int getYWolf(){
+		lock ( accessLock )
+		{
+			return logic.getYWolf();
+		}
+	}
+
+	public int getMaxDistance(){
+		lock ( accessLock )
+		{
+			return logic.getMaxDistance();
+		}
+	}
+
+	public void eatOrDrink(int quantity, int kindOfFood)
+	{
+		lock ( accessLock )
+		{
+			logic.eatOrDrink(quantity, kindOfFood);
+		}
+	}
+
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>

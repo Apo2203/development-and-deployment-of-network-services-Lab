@@ -80,8 +80,20 @@ class ClientRubbit
 				{	
 					int xWaterPosition = rnd.Next(1, 50);
 					int yWaterPosition = rnd.Next(1, 50);
+					int maxDist = service.getMaxDistance();
+
 					log.Info($"A pool with about {volumeOfWater} liters of water is spawning in the coordinates {xWaterPosition}, {yWaterPosition} ...");			
-					service.generateWater(xWaterPosition, yWaterPosition, volumeOfWater);
+					bool isClose = false;
+					do{
+						int xDistance = (System.Math.Abs(service.getXWolf() - xWaterPosition));
+						int yDistance = (System.Math.Abs(service.getYWolf() - yWaterPosition));
+						if(xDistance <= maxDist && yDistance <= maxDist)
+						{
+							service.eatOrDrink(volumeOfWater, 2);
+							isClose = true;
+						}
+						else Thread.Sleep(2000);
+					}while(!isClose);
 					log.Info($"A wolf moved really close to the water and drank it. Respawning the same water in another position...\n");
 					Thread.Sleep(5000);
 				}

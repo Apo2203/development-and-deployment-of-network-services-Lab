@@ -40,6 +40,10 @@ public interface IService
 
 	void generateWater(int x, int y, int litres);
 
+	int getXWolf();
+	int getYWolf();
+	int getMaxDistance();
+	void eatOrDrink(int quantity, int kindOfFood);
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>

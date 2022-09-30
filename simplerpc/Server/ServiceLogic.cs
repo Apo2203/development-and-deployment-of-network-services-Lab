@@ -11,15 +11,18 @@ using Services;
 public class ServiceLogic : IService
 {
 	// Max amount of food/water a wolf can eat/drink.
-	public const int maxWolfFood = 100;
+	public const int MAXWOLFFOOD = 100;
 	/// Minimum distance that make the wolf see a rabbit to eat or water to drink.
-	public const int maxDistance = 10;
+	public const int MAXDISTANCE = 40;
+
+	public const int RUBBIT = 1;
+	public const int WATER = 2;
 
 	private Logger log = LogManager.GetCurrentClassLogger();
 
 	// Amount of food that wolf can eat. Default is 100. It decremeant each time the wolf eat or drink. 
 	// It will be also reset when it became 0.
-	int wolfFoodLeft = maxWolfFood;
+	int wolfFoodLeft = MAXWOLFFOOD;
 	//The maximum amount of step the wolf is able to do in a single 'round'"
 	int wolfStep = 10;
 	
@@ -29,8 +32,6 @@ public class ServiceLogic : IService
 	// Coordinate in the space of walf position. From 0 to 50 where the spawn point is 0, 0.
 	int xWolfPosition = 0;
 	int yWolfPosition = 0;
-
-	int var = 111;
 	
 
 	// useful for the generation of random coordinates
@@ -69,25 +70,30 @@ public class ServiceLogic : IService
 		Thread.Sleep(7500);
 	}
 
-	void eatOrDrink(int quantity)
+	public void eatOrDrink(int quantity, int kindOfFood)
 	{
-		while(isAlreadyEating){} // Just do nothing, wait for the mutual exclusion.
-		isAlreadyEating = true; // take mutual exclusion
 
 		wolfFoodLeft = wolfFoodLeft - quantity;
-		if (wolfFoodLeft <= 0){ // The wolf eaten more than it could
-			wolfFoodLeft = maxWolfFood; // resetting the food the wolf can eat
-			log.Info("The wolf ate and drank more the he could. Now he has to wait a while before starting eating or drinking again...\n");
-			Thread.Sleep(30000); // I wait 5 seconds holding the mutual exclusion
+		if(kindOfFood == RUBBIT) 
+		{
+			log.Info($"!!! A rubbit with a weight of {quantity} kg moved too close to the walf and was eaten!!!");
 		}
-		isAlreadyEating = false; // release mutual exclusion
+		else if(kindOfFood == WATER)
+		{
+			log.Info($"\n!!! The wolf found a water pull of {quantity} litres and drank it!!!\n");
+		}
+		else log.Info("\nFATAL ERROR DURING EATORDRINK FUNCTION\n");
+
+		if (wolfFoodLeft <= 0){ // The wolf eaten more than it could
+			wolfFoodLeft = MAXWOLFFOOD; // resetting the food the wolf can eat
+			log.Info("The wolf ate and drank more the he could. Now he has to wait a while before starting eating or drinking again...\n");
+			Thread.Sleep(5000); // I wait 5 seconds holding the mutual exclusion
+		}
 	}
 
 	public int generateRubbit(int rubbitWeight){
-		log.Info($"var prima = {var}");
-		var = 222;
-		log.Info($"var dopo = {var}");
-		while(true){}
+
+
 		log.Info("A rubbit spawned in the server");
 		// just inizialing the variable.
 		int rubbitDistance = -1;		
@@ -96,9 +102,8 @@ public class ServiceLogic : IService
 		do{
 			//Rubbit distance from the wolf
 			rubbitDistance = rnd.Next(1, 100);
-			if(rubbitDistance < maxDistance){
-				log.Info($"\n!!! A rubbit with a weight of {rubbitWeight} kg moved too close to the walf and was eaten!!!\n");
-				eatOrDrink(rubbitWeight);
+			if(rubbitDistance < MAXDISTANCE){
+				//eatOrDrink(rubbitWeight);
 				isEaten = true;
 			}
 			else{ // If the rubbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
@@ -111,9 +116,6 @@ public class ServiceLogic : IService
 
 	public void generateWater(int xWaterPosition, int yWaterPosition, int litres)
 	{
-		log.Info($"var prima acqua = {var}");
-		var = 333;
-		log.Info($"var dopo acqua = {var}");
 		log.Info($"A pool with about {litres} liters of water is spawned in the server at x = {xWaterPosition} y = {yWaterPosition}");
 		// check periodically if the wolf is approaching the water 
 		bool isClose = false;
@@ -121,10 +123,9 @@ public class ServiceLogic : IService
 			int xDistance = (System.Math.Abs(xWolfPosition - xWaterPosition));
 			int yDistance = (System.Math.Abs(yWolfPosition - yWaterPosition));
 			log.Info($"Distanza dall'acqua uguale a {xDistance} {yDistance}");
-			if(xDistance <= maxDistance && yDistance <= maxDistance)
+			if(xDistance <= MAXDISTANCE && yDistance <= MAXDISTANCE)
 			{
-				log.Info($"\n!!! The wolf moved too close to a water pull of {litres} litres and drank it!!!\n");
-				eatOrDrink(litres);
+				//eatOrDrink(litres);
 				isClose = true;
 			}
 			else Thread.Sleep(2000);
@@ -132,6 +133,9 @@ public class ServiceLogic : IService
 		
 	}
 
+	public int getXWolf(){ return xWolfPosition; }
+	public int getYWolf(){ return yWolfPosition; }
+	public int getMaxDistance() { return MAXDISTANCE; }
 
 	/// <summary>
 	/// Add given numbers.

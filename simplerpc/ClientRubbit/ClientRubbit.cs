@@ -81,12 +81,28 @@ class ClientRubbit
 				/**
 				Generate a rubbit. When it dead (when the function that generate it end) I wait 5 sec and then I generate another one.
 				*/
+				int rubbitWeight = rnd.Next(1, 20);
 				while( true )
-				{	
-					int rubbitWeight = rnd.Next(1, 20);
-					log.Info($"A rubbit with a weight of ({rubbitWeight}) kg is spawning in the map...");
-					int distance = service.generateRubbit(rubbitWeight);
-					log.Info($"The rubbit moved too close to the wolf ({distance} metres) and was eaten.\n");
+				{
+					log.Info($"A rubbit with a weight of {rubbitWeight} kg was spawned in the server");
+					// just inizialing the variable.
+					int rubbitDistance = -1;		
+					// If the rubbit is eaten by the wolf;
+					bool isEaten = false; 
+					do{
+						//Rubbit distance from the wolf
+						rubbitDistance = rnd.Next(1, 20);
+						if(rubbitDistance < service.getMaxDistance()){
+							log.Info($"The rubbit moved too close to the wolf ({rubbitDistance} metres) and was eaten.\n");
+							service.eatOrDrink(rubbitWeight, 1);
+							isEaten = true;
+						}
+						else{ // If the rubbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
+							Thread.Sleep(2000); 
+						} 
+					}while(!isEaten);
+
+					// Rubbit eaten. Let's respawn him after 5 seconds.
 					Thread.Sleep(5000);
 				}
 			}
