@@ -19,6 +19,7 @@ class ClientRubbit
 	/// Logger for this class.
 	/// </summary>
 	Logger log = LogManager.GetCurrentClassLogger();
+	public static readonly TimeSpan InfiniteTimeSpan;
 
 	/// <summary>
 	/// Configures logging subsystem.
@@ -35,7 +36,6 @@ class ClientRubbit
 			};
 		config.AddTarget(console);
 		config.AddRuleForAllLevels(console);
-
 		LogManager.Configuration = config;
 	}
 
@@ -51,20 +51,26 @@ class ClientRubbit
 		{
 			try {
 				//connect to the server, get service client proxy
+				//HttpClient httpClient = new HttpClient();
+				//httpClient.Timeout = InfiniteTimeSpan;
 				var sc = new ServiceCollection();
+				
 				sc
 					.AddSimpleRpcClient(
 						"service", 
 						new HttpClientTransportOptions
 						{
 							Url = "http://127.0.0.1:5000/simplerpc",
-							Serializer = "HyperionMessageSerializer"
+							Serializer = "HyperionMessageSerializer",
 						}
+						
+						
 					)
 					.AddSimpleRpcHyperionSerializer();
-
+				
 				sc.AddSimpleRpcProxy<IService>("service");
 
+				
 				var sp = sc.BuildServiceProvider();
 
 				var service = sp.GetService<IService>();
@@ -82,23 +88,6 @@ class ClientRubbit
 					int distance = service.generateRubbit(rubbitWeight);
 					log.Info($"The rubbit moved too close to the wolf ({distance} metres) and was eaten.\n");
 					Thread.Sleep(5000);
-
-					/**
-					//test simple call
-					var left = rnd.Next(-100, 100);
-					var right = rnd.Next(-100, 100);
-					log.Info($"Before 'int Add(int, int)': left={left}, right={right}");
-
-					log.Info($"After 'int Add(int, int)': sum={sum}, left={left}, right={right}");
-					log.Info("---");
-
-					left = rnd.Next(-100, 100);
-					right = rnd.Next(-100, 100);
-					var leftAndRight = new ByValStruct() { Left = left, Right = right};
-
-					Thread.Sleep(2000);
-					*/
-
 				}
 			}
 			catch( Exception e )
@@ -119,6 +108,7 @@ class ClientRubbit
 	static void Main(string[] args)
 	{
 		var self = new ClientRubbit();
+		
 		Console.WriteLine("I'm starting the generation of the rubbits!\n");
 		self.Run();
 	}
