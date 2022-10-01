@@ -33,22 +33,6 @@ public class Service : IService
 		}
 	}
 
-	public int generateRubbit(int weight)
-	{
-		lock ( accessLock )
-		{
-			return logic.generateRubbit(weight);
-		}
-	}
-
-	public void generateWater(int x, int y, int litres)
-	{
-		lock ( accessLock )
-		{
-			logic.generateWater(x, y, litres);
-		}
-	}
-
 	public int getXWolf(){
 		lock ( accessLock )
 		{
@@ -74,6 +58,14 @@ public class Service : IService
 		lock ( accessLock )
 		{
 			logic.eatOrDrink(quantity, kindOfFood);
+		}
+	}
+
+	public void notifySpawn(int kindOfObject, int x, int y)
+	{
+		lock ( accessLock )
+		{
+			logic.notifySpawn(kindOfObject, x, y);
 		}
 	}
 

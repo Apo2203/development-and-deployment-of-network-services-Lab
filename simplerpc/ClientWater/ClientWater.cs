@@ -15,7 +15,7 @@ using Services;
 /// </summary>
 class ClientRubbit
 {
-
+	public const int WATER = 2;
 	/// <summary>
 	/// Logger for this class.
 	/// </summary>
@@ -83,6 +83,7 @@ class ClientRubbit
 					int maxDist = service.getMaxDistance();
 
 					log.Info($"A pool with about {volumeOfWater} liters of water is spawning in the coordinates {xWaterPosition}, {yWaterPosition} ...");			
+					service.notifySpawn(WATER, xWaterPosition, yWaterPosition);
 					bool isClose = false;
 					do{
 						int xDistance = (System.Math.Abs(service.getXWolf() - xWaterPosition));

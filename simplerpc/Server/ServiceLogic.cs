@@ -13,7 +13,7 @@ public class ServiceLogic : IService
 	// Max amount of food/water a wolf can eat/drink.
 	public const int MAXWOLFFOOD = 100;
 	/// Minimum distance that make the wolf see a rabbit to eat or water to drink.
-	public const int MAXDISTANCE = 40;
+	public const int MAXDISTANCE = 20;
 
 	public const int RUBBIT = 1;
 	public const int WATER = 2;
@@ -91,46 +91,16 @@ public class ServiceLogic : IService
 		}
 	}
 
-	public int generateRubbit(int rubbitWeight){
-
-
-		log.Info("A rubbit spawned in the server");
-		// just inizialing the variable.
-		int rubbitDistance = -1;		
-		// If the rubbit is eaten by the wolf;
-		bool isEaten = false; 
-		do{
-			//Rubbit distance from the wolf
-			rubbitDistance = rnd.Next(1, 100);
-			if(rubbitDistance < MAXDISTANCE){
-				//eatOrDrink(rubbitWeight);
-				isEaten = true;
-			}
-			else{ // If the rubbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
-				Thread.Sleep(2000); 
-			} 
-		}while(!isEaten);
-
-		return rubbitDistance;
-	}
-
-	public void generateWater(int xWaterPosition, int yWaterPosition, int litres)
-	{
-		log.Info($"A pool with about {litres} liters of water is spawned in the server at x = {xWaterPosition} y = {yWaterPosition}");
-		// check periodically if the wolf is approaching the water 
-		bool isClose = false;
-		do{
-			int xDistance = (System.Math.Abs(xWolfPosition - xWaterPosition));
-			int yDistance = (System.Math.Abs(yWolfPosition - yWaterPosition));
-			log.Info($"Distanza dall'acqua uguale a {xDistance} {yDistance}");
-			if(xDistance <= MAXDISTANCE && yDistance <= MAXDISTANCE)
-			{
-				//eatOrDrink(litres);
-				isClose = true;
-			}
-			else Thread.Sleep(2000);
-		}while(!isClose);
-		
+	public void notifySpawn(int kindOfObject, int x = 0, int y = 0){
+		if(kindOfObject == RUBBIT) 
+		{
+			log.Info($"A Rubbit with a weight of {x} kg just spawned in the server!");
+		}
+		else if(kindOfObject == WATER)
+		{
+			log.Info($"A pool of water just spawned in the server at the coordinates x:{x} y:{y}");
+		}
+		else log.Info("\nFATAL ERROR DURING NOTIFYSPAWN FUNCTION\n");
 	}
 
 	public int getXWolf(){ return xWolfPosition; }

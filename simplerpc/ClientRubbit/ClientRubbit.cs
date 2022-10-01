@@ -20,6 +20,7 @@ class ClientRubbit
 	/// </summary>
 	Logger log = LogManager.GetCurrentClassLogger();
 	public static readonly TimeSpan InfiniteTimeSpan;
+	public const int RUBBIT = 1;
 
 	/// <summary>
 	/// Configures logging subsystem.
@@ -85,6 +86,7 @@ class ClientRubbit
 				while( true )
 				{
 					log.Info($"A rubbit with a weight of {rubbitWeight} kg was spawned in the server");
+					service.notifySpawn(RUBBIT, rubbitWeight);
 					// just inizialing the variable.
 					int rubbitDistance = -1;		
 					// If the rubbit is eaten by the wolf;

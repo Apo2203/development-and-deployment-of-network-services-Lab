@@ -36,14 +36,12 @@ public interface IService
 	/// <returns>left + right</returns>
 	int AddLiteral(int left, int right);
 
-	int generateRubbit(int weight);
-
-	void generateWater(int x, int y, int litres);
-
 	int getXWolf();
 	int getYWolf();
 	int getMaxDistance();
 	void eatOrDrink(int quantity, int kindOfFood);
+	void notifySpawn(int kindOfObject, int x = 0, int y = 0);
+
 	/// <summary>
 	/// Add given numbers.
 	/// </summary>
