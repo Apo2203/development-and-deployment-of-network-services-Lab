@@ -10,21 +10,16 @@ using NLog;
 
 using Services;
 
-/// <summary>
-/// Client example.
-/// </summary>
-class ClientRubbit
+// Client that implement the rabbit
+class Clientrabbit
 {
-	/// <summary>
-	/// Logger for this class.
-	/// </summary>
+	// Logger for this class.
 	Logger log = LogManager.GetCurrentClassLogger();
-	public static readonly TimeSpan InfiniteTimeSpan;
-	public const int RUBBIT = 1;
 
-	/// <summary>
-	/// Configures logging subsystem.
-	/// </summary>
+	// constant variable that help me to relate to the rabbit
+	public const int rabbit = 1;
+
+	// Configures logging subsystem.
 	private void ConfigureLogging()
 	{
 		var config = new NLog.Config.LoggingConfiguration();
@@ -40,17 +35,17 @@ class ClientRubbit
 		LogManager.Configuration = config;
 	}
 
-	/// <summary>
-	/// Program body.
-	/// </summary>
-	private void Run() {
+	// Program body.
+	private void Run()
+	{
 		//configure logging
 		ConfigureLogging();
 
 		//run everythin in a loop to recover from connection errors
 		while( true )
 		{
-			try {
+			try 
+			{
 				//connect to the server, get service client proxy
 				//HttpClient httpClient = new HttpClient();
 				//httpClient.Timeout = InfiniteTimeSpan;
@@ -76,35 +71,43 @@ class ClientRubbit
 
 				var service = sp.GetService<IService>();
 
-				//use service
+				//use random's service
 				var rnd = new Random();
 
 				/**
-				Generate a rubbit. When it dead (when the function that generate it end) I wait 5 sec and then I generate another one.
+				Generating rabbits. When it dead it will be respawned in another point after 5 seconds.
 				*/
-				int rubbitWeight = rnd.Next(1, 20);
+				//Generating a random value for the rabbit weight
+				int rabbitWeight = rnd.Next(1, 20);
 				while( true )
 				{
-					log.Info($"A rubbit with a weight of {rubbitWeight} kg was spawned in the server");
-					service.notifySpawn(RUBBIT, rubbitWeight);
-					// just inizialing the variable.
-					int rubbitDistance = -1;		
-					// If the rubbit is eaten by the wolf;
+					//Notifying client and server about the spawn of the rabbit
+					log.Info($"A rabbit with a weight of {rabbitWeight} kg was spawned in the server");
+					service.notifySpawn(rabbit, rabbitWeight);
+
+					// inizialing the variable that will decide if the wolf is to close to the rabbit to eat it.
+					int rabbitDistance = -1;	
+
+					// If the rabbit is eaten by the wolf;
 					bool isEaten = false; 
-					do{
-						//Rubbit distance from the wolf
-						rubbitDistance = rnd.Next(1, 20);
-						if(rubbitDistance < service.getMaxDistance()){
-							log.Info($"The rubbit moved too close to the wolf ({rubbitDistance} metres) and was eaten.\n");
-							service.eatOrDrink(rubbitWeight, 1);
+					do
+					{
+						//generating random distance from the wolf
+						rabbitDistance = rnd.Next(1, 30);
+
+						if(rabbitDistance < service.getMaxDistance())
+						{ //if the wolf is so close to the rabbit to eat it
+							log.Info($"The rabbit moved too close to the wolf ({rabbitDistance} metres) and was eaten.\n");
+							service.eatOrDrink(rabbitWeight, 1);
 							isEaten = true;
 						}
-						else{ // If the rubbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
+						else
+						{ // If the rabbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
 							Thread.Sleep(2000); 
 						} 
 					}while(!isEaten);
 
-					// Rubbit eaten. Let's respawn him after 5 seconds.
+					// rabbit eaten. Let's respawn him after 5 seconds.
 					Thread.Sleep(5000);
 				}
 			}
@@ -119,15 +122,12 @@ class ClientRubbit
 		}
 	}
 
-	/// <summary>
-	/// Program entry point.
-	/// </summary>
-	/// <param name="args">Command line arguments.</param>
+	// Program entry point.
 	static void Main(string[] args)
 	{
-		var self = new ClientRubbit();
+		var self = new Clientrabbit();
 		
-		Console.WriteLine("I'm starting the generation of the rubbits!\n");
+		Console.WriteLine("The generation of the rabbits is starting!\n");
 		self.Run();
 	}
 }

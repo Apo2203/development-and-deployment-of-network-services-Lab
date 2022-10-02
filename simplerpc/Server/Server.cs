@@ -13,14 +13,10 @@ using Services;
 
 public class Server
 {
-	/// <summary>
-	/// Logger for this class.
-	/// </summary>
+	// Logger for this class.
 	Logger log = LogManager.GetCurrentClassLogger();
 
-	/// <summary>
-	/// Configure loggin subsystem.
-	/// </summary>
+	// Configure loggin subsystem.
 	private void ConfigureLogging()
 	{
 		var config = new NLog.Config.LoggingConfiguration();
@@ -36,20 +32,14 @@ public class Server
 		LogManager.Configuration = config;
 	}
 
-	/// <summary>
-	/// Program entry point.
-	/// </summary>
-	/// <param name="args">Command line arguments.</param>
+	// Program entry point.
 	public static void Main(string[] args)
 	{
 		var self = new Server();
 		self.Run(args);
 	}
 
-	/// <summary>
-	/// Program body.
-	/// </summary>
-	/// <param name="args">Command line arguments.</param>
+	// Program body.
 	private void Run(string[] args) 
 	{
 		//configure logging
@@ -60,20 +50,19 @@ public class Server
 		
 		//start the server
 		StartServer(args);
-
-		while(true){
+		
+		//Calling the function that will generate the wolf coordinates.
+		while(true)
+		{
 			Service.logic.generateWolfPosition();
 		}
 
 	}
 
-	/// <summary>
-	/// Starts integrated server.
-	/// </summary>
-	/// <param name="args">Command line arguments.</param>
+	// Starts integrated server.
 	private void StartServer(string[] args)
 	{
-		///create web app builder
+		//create web app builder
 		var builder = WebApplication.CreateBuilder(args);
 
 		//configure integrated server
@@ -96,8 +85,7 @@ public class Server
 		//add SimpleRPC middleware
 		app.UseSimpleRpcServer();
 		
-		//run the server
-		//app.Run();
-		app.RunAsync(); //use this if you need to implement background processing in the main thread
+		//run the server like this to implement background processing in the main thread
+		app.RunAsync();
 	}
 }

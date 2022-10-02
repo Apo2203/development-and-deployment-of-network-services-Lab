@@ -10,19 +10,14 @@ using NLog;
 
 using Services;
 
-/// <summary>
-/// Client example.
-/// </summary>
-class ClientRubbit
+// Client that implement the water.
+class ClientWater
 {
+	// constant variable that help me to relate to water
 	public const int WATER = 2;
-	/// <summary>
 	/// Logger for this class.
-	/// </summary>
 	Logger log = LogManager.GetCurrentClassLogger();
-	/// <summary>
 	/// Configures logging subsystem.
-	/// </summary>
 	private void ConfigureLogging()
 	{
 		var config = new NLog.Config.LoggingConfiguration();
@@ -39,17 +34,17 @@ class ClientRubbit
 		LogManager.Configuration = config;
 	}
 
-	/// <summary>
-	/// Program body.
-	/// </summary>
-	private void Run() {
+	// Program body where the water's function are managed
+	private void Run() 
+	{
 		//configure logging
 		ConfigureLogging();
 
-		//run everythin in a loop to recover from connection errors
+		//run everything in a loop to recover from connection errors
 		while( true )
 		{
-			try {
+			try 
+			{
 				//connect to the server, get service client proxy
 				var sc = new ServiceCollection();
 				sc
@@ -69,33 +64,46 @@ class ClientRubbit
 
 				var service = sp.GetService<IService>();
 
-				//use service
+				//use random's service
 				var rnd = new Random();
 
 				/**
-				Generate a rubbit. When it dead (when the function that generate it end) I wait 5 sec and then I generate another one.
+				Generatig water. When it's drinked by the wolf the water respawn in another random point after 5 seconds.
 				*/
+				// Generating a random volume for the water pool
 				int volumeOfWater = rnd.Next(1, 10);
 				while( true )
 				{	
+					// Generating a random position in the map of the water pool
 					int xWaterPosition = rnd.Next(1, 50);
 					int yWaterPosition = rnd.Next(1, 50);
-					int maxDist = service.getMaxDistance();
 
+					// Asking to the server for the max distance range in which the wolf is able to see the pool 
+					int maxDist = service.getMaxDistance();
+					
+					// Notifying client and server about the spawn of the water pool
 					log.Info($"A pool with about {volumeOfWater} liters of water is spawning in the coordinates {xWaterPosition}, {yWaterPosition} ...");			
 					service.notifySpawn(WATER, xWaterPosition, yWaterPosition);
+
+					// Variable that help me to check if the wolf is so close to the water to drink it
 					bool isClose = false;
-					do{
+					do
+					{
+						// Asking to the server the wolf position and checking the distance between the water pool
 						int xDistance = (System.Math.Abs(service.getXWolf() - xWaterPosition));
 						int yDistance = (System.Math.Abs(service.getYWolf() - yWaterPosition));
-						if(xDistance <= maxDist && yDistance <= maxDist)
+						if(xDistance <= maxDist && yDistance <= maxDist) // If the wolf is so close to drink the water
 						{
+							// Asking the server to make the wolf drink the water
 							service.eatOrDrink(volumeOfWater, 2);
 							isClose = true;
 						}
+						// Otherwise waiting for a while to make the wolf to change position
 						else Thread.Sleep(2000);
 					}while(!isClose);
+
 					log.Info($"A wolf moved really close to the water and drank it. Respawning the same water in another position...\n");
+					// waiting for a while before respawning the water in another position
 					Thread.Sleep(5000);
 				}
 			}
@@ -110,14 +118,11 @@ class ClientRubbit
 		}
 	}
 
-	/// <summary>
-	/// Program entry point.
-	/// </summary>
-	/// <param name="args">Command line arguments.</param>
+	// Program entry point.
 	static void Main(string[] args)
 	{
-		var self = new ClientRubbit();
-		Console.WriteLine("I'm starting the generation of the water!\n");
+		var self = new ClientWater();
+		Console.WriteLine("The generation of the water is starting!\n");
 		self.Run();
 	}
 }

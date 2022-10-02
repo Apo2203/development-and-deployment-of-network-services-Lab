@@ -28,24 +28,9 @@ public class ByValStruct
 /// </summary>
 public interface IService
 {
-	/// <summary>
-	/// Add given numbers.
-	/// </summary>
-	/// <param name="left">Left number.</param>
-	/// <param name="right">Right number.</param>
-	/// <returns>left + right</returns>
-	int AddLiteral(int left, int right);
-
 	int getXWolf();
 	int getYWolf();
 	int getMaxDistance();
 	void eatOrDrink(int quantity, int kindOfFood);
 	void notifySpawn(int kindOfObject, int x = 0, int y = 0);
-
-	/// <summary>
-	/// Add given numbers.
-	/// </summary>
-	/// <param name="leftAndRight">Numbers to add.</param>
-	/// <returns>Left + Right in Sum</returns>
-	ByValStruct AddStruct(ByValStruct leftAndRight);
 }
