@@ -18,6 +18,13 @@ public class Service : IService
 	/// </summary>
 	public static ServiceLogic logic = new ServiceLogic();
 
+	public void generateWolfPosition()
+	{
+		lock ( accessLock )
+		{
+			logic.generateWolfPosition();
+		}
+	}
 
 	public int getXWolf(){
 		lock ( accessLock )
@@ -39,11 +46,11 @@ public class Service : IService
 		}
 	}
 
-	public void eatOrDrink(int quantity, int kindOfFood)
+	public int eatOrDrink(int quantity, int kindOfFood)
 	{
 		lock ( accessLock )
 		{
-			logic.eatOrDrink(quantity, kindOfFood);
+			return logic.eatOrDrink(quantity, kindOfFood);
 		}
 	}
 
@@ -55,4 +62,11 @@ public class Service : IService
 		}
 	}
 
+	public void resetFood()
+	{
+		lock (accessLock)
+		{
+			logic.resetFood();
+		}
+	}
 }

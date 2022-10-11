@@ -1,6 +1,6 @@
 ﻿namespace Services;
 
-
+// TODO RIMUOVI STA COSA
 /// <summary>
 /// Structure for testing pass-by-value calls.
 /// </summary>
@@ -28,9 +28,11 @@ public class ByValStruct
 /// </summary>
 public interface IService
 {
+	void generateWolfPosition();
 	int getXWolf();
 	int getYWolf();
 	int getMaxDistance();
-	void eatOrDrink(int quantity, int kindOfFood);
+	int eatOrDrink(int quantity, int kindOfFood);
 	void notifySpawn(int kindOfObject, int x = 0, int y = 0);
+	void resetFood();
 }

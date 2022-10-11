@@ -95,7 +95,11 @@ class ClientWater
 						if(xDistance <= maxDist && yDistance <= maxDist) // If the wolf is so close to drink the water
 						{
 							// Asking the server to make the wolf drink the water
-							service.eatOrDrink(volumeOfWater, 2);
+							if ( service.eatOrDrink(volumeOfWater, WATER) == 1)
+							{
+								Thread.Sleep(5000);
+								service.resetFood();
+							}
 							isClose = true;
 						}
 						// Otherwise waiting for a while to make the wolf to change position

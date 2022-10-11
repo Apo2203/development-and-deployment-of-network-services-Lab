@@ -20,6 +20,9 @@ public class ServiceLogic : IService
 	//The maximum amount of step the wolf is able to do in a single 'movement'
 	public const int WOLFSTEP = 10;
 
+	// A flag that tell me if the walf can eat or drink in this moment.
+	public bool canEat = true;
+
 	private Logger log = LogManager.GetCurrentClassLogger();
 
 	// Amount of food that wolf can eat. It decremeant each time the wolf eat or drink. 
@@ -58,28 +61,39 @@ public class ServiceLogic : IService
 	}
 
 	//Function called when the wolf is so close to a rabbit or a water pool to eat it.
-	public void eatOrDrink(int quantity, int kindOfFood)
+	//TODO REMOVE THE SLEEP
+	//TODO Se il lupo si trova nei 5 secondi in cui non può mangiare o fare cose semplicemente il client non lo fa
+	// va avanti come se (ad esempio) il rubbit fosse ancora lontano
+	public int eatOrDrink(int quantity, int kindOfFood)
 	{
 
-		wolfFoodLeft = wolfFoodLeft - quantity;
-		
-		//Notifying what the wolf is eating or drinking to the server
-		if(kindOfFood == RABBIT) 
+		if (canEat)
 		{
-			log.Info($"A rabbit with a weight of {quantity} kg moved too close to the walf and was eaten!!!\n");
-		}
-		else if(kindOfFood == WATER)
-		{
-			log.Info($"The wolf found a water pull of {quantity} litres and drank it!!!\n");
-		}
-		else log.Info("\nFATAL ERROR DURING EATORDRINK FUNCTION\n");
+			wolfFoodLeft = wolfFoodLeft - quantity;
+			
+			//Notifying what the wolf is eating or drinking to the server
+			if(kindOfFood == RABBIT) 
+			{
+				log.Info($"A rabbit with a weight of {quantity} kg moved too close to the walf and was eaten!!!\n");
+			}
+			else if(kindOfFood == WATER)
+			{
+				log.Info($"The wolf found a water pull of {quantity} litres and drank it!!!\n");
+			}
+			else log.Info("\nFATAL ERROR DURING EATORDRINK FUNCTION\n");
 
-		if (wolfFoodLeft <= 0)
-		{ // The wolf eaten more than it could
-			wolfFoodLeft = MAXWOLFFOOD; // resetting the food the wolf can eat
-			log.Info("The wolf ate and drank more the he could. Now he has to wait a while before starting eating or drinking again...\n");
-			Thread.Sleep(5000); // I wait 5 seconds holding the mutual exclusion
+			if (wolfFoodLeft <= 0)
+			{ 	// The wolf eaten more than it could
+				log.Info("The wolf ate and drank more the he could. Now he has to wait a while before starting eating or drinking again...\n");
+
+				wolfFoodLeft = -1;
+				// Setting the flag so the walf can't eat anymore.
+				canEat = false;
+				return 1; 
+			}
 		}
+		// nothing else have to happen, everything okay like this
+		return 0;
 	}
 
 	//Function called to notify when a rabbit or a water pool spawn in the server
@@ -93,6 +107,14 @@ public class ServiceLogic : IService
 			log.Info($"A pool of water just spawned in the server at the coordinates x:{x} y:{y}");
 		}
 		else log.Info("\nFATAL ERROR DURING NOTIFYSPAWN FUNCTION\n");
+	}
+
+	public void resetFood()
+	{
+		// Reset the amount of food the wolf can eat
+		wolfFoodLeft = MAXWOLFFOOD;
+		// Reset the flag that allow the wolf to eat more
+		canEat = true;
 	}
 
 	// A way to takes useful variable from the server to the clients.

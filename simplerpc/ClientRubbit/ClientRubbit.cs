@@ -17,7 +17,7 @@ class Clientrabbit
 	Logger log = LogManager.GetCurrentClassLogger();
 
 	// constant variable that help me to relate to the rabbit
-	public const int rabbit = 1;
+	public const int RABBIT = 1;
 
 	// Configures logging subsystem.
 	private void ConfigureLogging()
@@ -77,13 +77,13 @@ class Clientrabbit
 				/**
 				Generating rabbits. When it dead it will be respawned in another point after 5 seconds.
 				*/
-				//Generating a random value for the rabbit weight
-				int rabbitWeight = rnd.Next(1, 20);
 				while( true )
 				{
+					//Generating a random value for the rabbit weight
+					int rabbitWeight = rnd.Next(1, 20);
 					//Notifying client and server about the spawn of the rabbit
 					log.Info($"A rabbit with a weight of {rabbitWeight} kg was spawned in the server");
-					service.notifySpawn(rabbit, rabbitWeight);
+					service.notifySpawn(RABBIT, rabbitWeight);
 
 					// inizialing the variable that will decide if the wolf is to close to the rabbit to eat it.
 					int rabbitDistance = -1;	
@@ -93,17 +93,23 @@ class Clientrabbit
 					do
 					{
 						//generating random distance from the wolf
-						rabbitDistance = rnd.Next(1, 30);
+						rabbitDistance = rnd.Next(1, 50);
 
 						if(rabbitDistance < service.getMaxDistance())
 						{ //if the wolf is so close to the rabbit to eat it
 							log.Info($"The rabbit moved too close to the wolf ({rabbitDistance} metres) and was eaten.\n");
-							service.eatOrDrink(rabbitWeight, 1);
+
+							if (service.eatOrDrink(rabbitWeight, RABBIT) == 1) // The walf eat more than he could.
+							{
+								// Wait 5 seconds then allow the wolf to eat or drink again.
+								Thread.Sleep(5000);
+								service.resetFood();
+							}
 							isEaten = true;
 						}
 						else
 						{ // If the rabbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
-							Thread.Sleep(2000); 
+							Thread.Sleep(3000); 
 						} 
 					}while(!isEaten);
 

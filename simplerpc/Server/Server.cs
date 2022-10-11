@@ -52,9 +52,16 @@ public class Server
 		StartServer(args);
 		
 		//Calling the function that will generate the wolf coordinates.
+		//TODO METTI IL LOCK NEL SERVER (come fai con il client)
+		
+		var sc = new ServiceCollection();
+		var sp = sc.BuildServiceProvider();
+		var service = sp.GetService<IService>();
+
 		while(true)
 		{
 			Service.logic.generateWolfPosition();
+			//service.generateWolfPosition();
 		}
 
 	}
