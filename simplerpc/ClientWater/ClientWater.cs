@@ -70,6 +70,7 @@ class ClientWater
 				/**
 				Generatig water. When it's drinked by the wolf the water respawn in another random point after 5 seconds.
 				*/
+
 				// Generating a random volume for the water pool
 				int volumeOfWater = rnd.Next(1, 10);
 				while( true )
@@ -85,8 +86,8 @@ class ClientWater
 					log.Info($"A pool with about {volumeOfWater} liters of water is spawning in the coordinates {xWaterPosition}, {yWaterPosition} ...");			
 					service.notifySpawn(WATER, xWaterPosition, yWaterPosition);
 
-					// Variable that help me to check if the wolf is so close to the water to drink it
-					bool isClose = false;
+					// Variable that help me to check if water was drunk by the wolf.
+					bool isDrunk = false;
 					do
 					{
 						// Asking to the server the wolf position and checking the distance between the water pool
@@ -95,18 +96,13 @@ class ClientWater
 						if(xDistance <= maxDist && yDistance <= maxDist) // If the wolf is so close to drink the water
 						{
 							// Asking the server to make the wolf drink the water
-							if ( service.eatOrDrink(volumeOfWater, WATER) == 1)
-							{
-								Thread.Sleep(5000);
-								service.resetFood();
-							}
-							isClose = true;
+							if (service.eatOrDrink(volumeOfWater, WATER)) isDrunk = true;
 						}
-						// Otherwise waiting for a while to make the wolf to change position
-						else Thread.Sleep(2000);
-					}while(!isClose);
+						// Otherwise waiting for a while to make the wolf to change position and check again.
+						else Thread.Sleep(5000);
+					}while(!isDrunk);
 
-					log.Info($"A wolf moved really close to the water and drank it. Respawning the same water in another position...\n");
+					log.Info($"A wolf moved	close to the water and drank it. Respawning the same water in another position...\n");
 					// waiting for a while before respawning the water in another position
 					Thread.Sleep(5000);
 				}

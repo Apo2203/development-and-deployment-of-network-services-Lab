@@ -71,7 +71,7 @@ class Clientrabbit
 
 				var service = sp.GetService<IService>();
 
-				//use random's service
+				// Use random's service
 				var rnd = new Random();
 
 				/**
@@ -79,41 +79,36 @@ class Clientrabbit
 				*/
 				while( true )
 				{
-					//Generating a random value for the rabbit weight
+					// Generating a random value for the rabbit weight.
 					int rabbitWeight = rnd.Next(1, 20);
-					//Notifying client and server about the spawn of the rabbit
-					log.Info($"A rabbit with a weight of {rabbitWeight} kg was spawned in the server");
+
+					// Notifying client and server about the spawn of the rabbit.
+					log.Info($"A rabbit with a weight of {rabbitWeight} kg is spawned in the server");
 					service.notifySpawn(RABBIT, rabbitWeight);
 
-					// inizialing the variable that will decide if the wolf is to close to the rabbit to eat it.
+					// inizialing the variable that will decide if the wolf is so close to the rabbit to eat it.
 					int rabbitDistance = -1;	
 
-					// If the rabbit is eaten by the wolf;
+					// Variable to know if the rabbit is eaten by the wolf;
 					bool isEaten = false; 
 					do
 					{
-						//generating random distance from the wolf
-						rabbitDistance = rnd.Next(1, 50);
+						// Generating random distance from the wolf
+						rabbitDistance = rnd.Next(1, 100);
 
 						if(rabbitDistance < service.getMaxDistance())
-						{ //if the wolf is so close to the rabbit to eat it
+						{ // If the wolf is so close to the rabbit to eat it
 							log.Info($"The rabbit moved too close to the wolf ({rabbitDistance} metres) and was eaten.\n");
 
-							if (service.eatOrDrink(rabbitWeight, RABBIT) == 1) // The walf eat more than he could.
-							{
-								// Wait 5 seconds then allow the wolf to eat or drink again.
-								Thread.Sleep(5000);
-								service.resetFood();
-							}
-							isEaten = true;
+							if (service.eatOrDrink(rabbitWeight, RABBIT)) isEaten = true;
 						}
 						else
-						{ // If the rabbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds
-							Thread.Sleep(3000); 
+						{ // If the rabbit is not so close to the wolf it just moved (and so generated again random value about distance) after some seconds.
+							Thread.Sleep(5000); 
 						} 
 					}while(!isEaten);
 
-					// rabbit eaten. Let's respawn him after 5 seconds.
+					// Rabbit was eaten. Let's respawn another one after 5 seconds.
 					Thread.Sleep(5000);
 				}
 			}
@@ -132,7 +127,6 @@ class Clientrabbit
 	static void Main(string[] args)
 	{
 		var self = new Clientrabbit();
-		
 		Console.WriteLine("The generation of the rabbits is starting!\n");
 		self.Run();
 	}

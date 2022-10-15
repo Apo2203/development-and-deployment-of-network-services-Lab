@@ -11,7 +11,7 @@ public class ServiceLogic : IService
 	// Max amount of food/water a wolf can eat/drink.
 	public const int MAXWOLFFOOD = 100;
 	// Minimum range that make the wolf see a rabbit to eat or water to drink.
-	public const int MAXDISTANCE = 10;
+	public const int MAXDISTANCE = 20;
 	
 	// Constant that help me to relate to rabbit / water
 	public const int RABBIT = 1;
@@ -57,62 +57,54 @@ public class ServiceLogic : IService
 
 		//Notifying the server about the wolf position and other useful information.
         log.Info($"Wolf position -> x: {xWolfPosition} y: {yWolfPosition}. Food left -> {wolfFoodLeft}");
-		Thread.Sleep(7500);
 	}
 
 	//Function called when the wolf is so close to a rabbit or a water pool to eat it.
-	//TODO REMOVE THE SLEEP
-	//TODO Se il lupo si trova nei 5 secondi in cui non può mangiare o fare cose semplicemente il client non lo fa
-	// va avanti come se (ad esempio) il rubbit fosse ancora lontano
-	public int eatOrDrink(int quantity, int kindOfFood)
+	public bool eatOrDrink(int quantity, int kindOfFood)
 	{
 
 		if (canEat)
 		{
 			wolfFoodLeft = wolfFoodLeft - quantity;
 			
-			//Notifying what the wolf is eating or drinking to the server
-			if(kindOfFood == RABBIT) 
-			{
-				log.Info($"A rabbit with a weight of {quantity} kg moved too close to the walf and was eaten!!!\n");
-			}
-			else if(kindOfFood == WATER)
-			{
-				log.Info($"The wolf found a water pull of {quantity} litres and drank it!!!\n");
-			}
-			else log.Info("\nFATAL ERROR DURING EATORDRINK FUNCTION\n");
+			//Notifying what the wolf is eating or drinking to the server.
+
+			if(kindOfFood == RABBIT) 	 log.Info($"A rabbit with a weight of {quantity} kg moved too close to the walf and was eaten!!!\n");
+
+			else if(kindOfFood == WATER) log.Info($"The wolf found a water pull of {quantity} litres and drank it!!!\n");
+
+			else 						 log.Info("\nFATAL ERROR DURING EATORDRINK FUNCTION\n");
 
 			if (wolfFoodLeft <= 0)
-			{ 	// The wolf eaten more than it could
+			{ 	// The wolf eaten more than it could.
 				log.Info("The wolf ate and drank more the he could. Now he has to wait a while before starting eating or drinking again...\n");
+				wolfFoodLeft = 0;
 
-				wolfFoodLeft = -1;
 				// Setting the flag so the walf can't eat anymore.
 				canEat = false;
-				return 1; 
 			}
+			// Return true if walf was able to eat or drink.
+			return true;
 		}
-		// nothing else have to happen, everything okay like this
-		return 0;
+		// Return false if the walf wasn't able to eat or drink.
+		else return false;
 	}
 
 	//Function called to notify when a rabbit or a water pool spawn in the server
-	public void notifySpawn(int kindOfObject, int x = 0, int y = 0){
-		if(kindOfObject == RABBIT) 
-		{
-			log.Info($"A rabbit with a weight of {x} kg just spawned in the server!");
-		}
-		else if(kindOfObject == WATER)
-		{
-			log.Info($"A pool of water just spawned in the server at the coordinates x:{x} y:{y}");
-		}
-		else log.Info("\nFATAL ERROR DURING NOTIFYSPAWN FUNCTION\n");
+	public void notifySpawn(int kindOfObject, int x = 0, int y = 0)
+	{
+		if(kindOfObject == RABBIT)		log.Info($"A rabbit with a weight of {x} kg just spawned in the server!");
+		
+		else if(kindOfObject == WATER)	log.Info($"A pool of water just spawned in the server at the coordinates x:{x} y:{y}");
+		
+		else 							log.Info("\nFATAL ERROR DURING NOTIFYSPAWN FUNCTION\n");
 	}
 
 	public void resetFood()
 	{
 		// Reset the amount of food the wolf can eat
 		wolfFoodLeft = MAXWOLFFOOD;
+		
 		// Reset the flag that allow the wolf to eat more
 		canEat = true;
 	}
@@ -121,5 +113,7 @@ public class ServiceLogic : IService
 	public int getXWolf(){ return xWolfPosition; }
 	public int getYWolf(){ return yWolfPosition; }
 	public int getMaxDistance() { return MAXDISTANCE; }
+	// Status is True if the wolf can still eat more. False if he can't.
+	public bool checkStatus() {return canEat; }
 
 }

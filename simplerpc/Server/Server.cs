@@ -7,6 +7,7 @@ using NLog;
 using SimpleRpc.Transports;
 using SimpleRpc.Transports.Http.Server;
 using SimpleRpc.Serialization.Hyperion;
+using System.Threading;
 
 using Services;
 
@@ -51,17 +52,35 @@ public class Server
 		//start the server
 		StartServer(args);
 		
-		//Calling the function that will generate the wolf coordinates.
-		//TODO METTI IL LOCK NEL SERVER (come fai con il client)
-		
-		var sc = new ServiceCollection();
-		var sp = sc.BuildServiceProvider();
-		var service = sp.GetService<IService>();
 
+
+		// New thread that will help me to check and work constantly on some parameters in the server
+		new Thread(() => 
+		{
+			// Make actual thread to continue working
+			Thread.CurrentThread.IsBackground = true; 
+
+			// Operation I want to do in the new thread.
+			while(true)
+			{
+				// Wolf eat more than he could. Waiting 5 seconds and make him eat again.
+				if (Service.logic.checkStatus() == false)
+				{
+					Thread.Sleep(5000);
+					Service.logic.resetFood();
+				}
+				// To avoid checking spam
+				else Thread.Sleep(100);
+			}
+
+		}).Start();
+
+		//Calling the function that will generate and update the wolf coordinates.		
 		while(true)
 		{
 			Service.logic.generateWolfPosition();
-			//service.generateWolfPosition();
+			// Update wolf position every 7 seconds.
+			Thread.Sleep(7000);
 		}
 
 	}

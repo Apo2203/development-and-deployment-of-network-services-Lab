@@ -3,19 +3,19 @@ namespace Servers;
 using Services;
 
 
-/// <summary>
-/// Service
-/// </summary>
+// <summary>
+// Service
+// </summary>
 public class Service : IService
 {
-	/// <summary>
-	/// Access lock.
-	/// </summary>
+	// <summary>
+	// Access lock.
+	// </summary>
 	public static readonly Object accessLock = new Object();
 
-	/// <summary>
-	/// Service logic implementation.
-	/// </summary>
+	// <summary>
+	// Service logic implementation.
+	// </summary>
 	public static ServiceLogic logic = new ServiceLogic();
 
 	public void generateWolfPosition()
@@ -46,7 +46,7 @@ public class Service : IService
 		}
 	}
 
-	public int eatOrDrink(int quantity, int kindOfFood)
+	public bool eatOrDrink(int quantity, int kindOfFood)
 	{
 		lock ( accessLock )
 		{
@@ -67,6 +67,14 @@ public class Service : IService
 		lock (accessLock)
 		{
 			logic.resetFood();
+		}
+	}
+
+	public bool checkStatus()
+	{
+		lock(accessLock)
+		{
+			return logic.checkStatus();
 		}
 	}
 }
