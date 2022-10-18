@@ -18,7 +18,7 @@ public class Service : IService
 	// </summary>
 	public static ServiceLogic logic = new ServiceLogic();
 
-	public void generateWolfPosition()
+	public static void generateWolfPosition()
 	{
 		lock ( accessLock )
 		{
@@ -62,7 +62,7 @@ public class Service : IService
 		}
 	}
 
-	public void resetFood()
+	public static void resetFood()
 	{
 		lock (accessLock)
 		{
@@ -70,7 +70,7 @@ public class Service : IService
 		}
 	}
 
-	public bool checkStatus()
+	public static bool checkStatus()
 	{
 		lock(accessLock)
 		{

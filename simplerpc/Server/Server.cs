@@ -52,8 +52,6 @@ public class Server
 		//start the server
 		StartServer(args);
 		
-
-
 		// New thread that will help me to check and work constantly on some parameters in the server
 		new Thread(() => 
 		{
@@ -64,10 +62,10 @@ public class Server
 			while(true)
 			{
 				// Wolf eat more than he could. Waiting 5 seconds and make him eat again.
-				if (Service.logic.checkStatus() == false)
+				if (Service.checkStatus() == false)
 				{
 					Thread.Sleep(5000);
-					Service.logic.resetFood();
+					Service.resetFood();
 				}
 				// To avoid checking spam
 				else Thread.Sleep(100);
@@ -78,7 +76,8 @@ public class Server
 		//Calling the function that will generate and update the wolf coordinates.		
 		while(true)
 		{
-			Service.logic.generateWolfPosition();
+			
+			Service.generateWolfPosition();
 			// Update wolf position every 7 seconds.
 			Thread.Sleep(7000);
 		}
